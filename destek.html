@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFİAMC | Destek</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header" data-aos="fade-down">
+        <div class="container mx-auto px-6 grid grid-cols-3 items-center">
+            <div class="flex justify-start">
+                <div onclick="copyIP()" class="cursor-pointer group bg-white/5 border border-white/10 px-4 py-2 rounded-xl hover:border-blue-500 transition-all">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sunucu IP</p>
+                    <p class="text-sm font-black text-white">sofianetwork.falixsrv.me</p>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <a href="index.html" class="hover:scale-105 transition-transform"><img src="logo.png" alt="Logo" class="h-24 drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]"></a>
+            </div>
+            <nav class="flex justify-end gap-2">
+                <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i></a>
+                <a href="duyuru.html" class="nav-link"><i class="fa-solid fa-bullhorn"></i></a>
+                <a href="market.html" class="nav-link"><i class="fa-solid fa-gem"></i></a>
+                <a href="kurallar.html" class="nav-link"><i class="fa-solid fa-gavel"></i></a>
+                <a href="destek.html" class="nav-link active"><i class="fa-solid fa-headset"></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 mt-24 pb-20 max-w-2xl text-center" data-aos="zoom-in">
+        <div class="glass p-12 rounded-[4rem] shadow-2xl">
+            <i class="fa-solid fa-headset text-6xl text-blue-500 mb-6"></i>
+            <h2 class="text-5xl font-black italic mb-2 uppercase">DESTEK <span class="text-blue-500">TALEBİ</span></h2>
+            <p class="mb-10 text-gray-400 font-bold">Sorunlarını bize bildir, profesyonel ekibimiz en kısa sürede dönüş yapsın.</p>
+            
+            <form id="supportForm" class="space-y-6">
+                <input type="text" placeholder="Minecraft Nickin" required 
+                       class="w-full bg-white/5 border border-blue-500/20 p-6 rounded-3xl text-white outline-none focus:border-blue-500 transition-all">
+                
+                <select class="w-full bg-white/5 border border-blue-500/20 p-6 rounded-3xl text-gray-400 outline-none focus:border-blue-500 transition-all">
+                    <option>Sorun Kategorisi Seç</option>
+                    <option>Ödeme Sorunu</option>
+                    <option>Kural İhlali</option>
+                    <option>Teknik Sorunlar</option>
+                    <option>Diğer</option>
+                </select>
+
+                <textarea placeholder="Sorunun nedir?" required 
+                          class="w-full bg-white/5 border border-blue-500/20 p-6 rounded-3xl text-white h-40 outline-none focus:border-blue-500 transition-all"></textarea>
+                
+                <button type="submit" class="SOFİAMC-btn w-full justify-center text-lg">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> TALEBİ GÖNDER
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        function copyIP() { navigator.clipboard.writeText("sofianetwork.falixsrv.me"); alert("IP kopyalandı: sofianetwork.falixsrv.me"); }
+
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Talebiniz başarıyla gönderildi! Destek ekibimiz en kısa sürede Discord üzerinden sizinle iletişime geçecektir.");
+        });
+    </script>
+</body>
+</html>

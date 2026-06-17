@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme İşlemi | SOFİAMC </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .loader { border: 4px solid rgba(59, 130, 246, 0.2); border-left: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 bg-[#0a0a0a]">
+
+    <div class="fixed top-0 left-0 w-full bg-blue-600/20 border-b border-blue-500/30 text-blue-400 text-center py-3 text-xs font-black uppercase tracking-widest z-[100] animate-pulse">
+        <i class="fa-solid fa-triangle-exclamation mr-2"></i> TEST MODU AKTİF. BU ORTAM CANLI TAHSİLAT ALMAZ, SADECE MAĞAZA AKIŞINI DOĞRULAMAK İÇİN KULLANILIR.
+    </div>
+
+    <div id="content" class="glass p-12 mt-12 rounded-[3rem] text-center max-w-lg w-full transform opacity-0 transition-opacity duration-1000">
+        <h2 id="paket-adi" class="text-4xl font-black italic mb-8 uppercase text-blue-500">PAKET YÜKLENİYOR...</h2>
+        
+        <div class="bg-black/40 border border-white/10 p-8 rounded-2xl mb-8">
+            <p class="text-gray-400 font-bold text-xs uppercase mb-1">Satın Alınacak Tutar</p>
+            <div id="paket-fiyat" class="text-4xl font-black text-white mb-6">...</div>
+            <p class="text-gray-400 font-bold text-xs uppercase mb-1">Ödeme Yöntemi</p>
+            <p class="text-lg font-bold text-blue-400"><i class="fa-solid fa-coins mr-2"></i> SOFİAMC  COIN</p>
+        </div>
+
+        <p class="text-xs text-gray-500 mb-8 italic">Bu işlem bakiyenizden otomatik olarak düşülecektir.</p>
+        
+        <button onclick="tamamla()" class="SOFİAMC -btn w-full justify-center mb-4">İŞLEMİ ONAYLA</button>
+        <button onclick="window.location.href='market.html'" class="w-full text-gray-500 font-bold hover:text-white transition-all">İPTAL ET</button>
+    </div>
+
+    <div id="loader-box" class="fixed inset-0 flex items-center justify-center bg-black z-50">
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // Yükleme animasyonu
+            setTimeout(() => {
+                document.getElementById('loader-box').style.display = 'none';
+                document.getElementById('content').classList.remove('opacity-0');
+            }, 1000);
+
+            // Paket verisini al
+            const params = new URLSearchParams(window.location.search);
+            const p = params.get('paket');
+            document.getElementById('paket-adi').innerText = (p ? p : "ÖDEME") + " PAKETİ";
+            
+            // Fiyatlandırma
+            const fiyatlar = { 'VIP': '150 COIN', 'MVP': '250 COIN', 'COIN': '500 COIN' };
+            document.getElementById('paket-fiyat').innerText = fiyatlar[p] || '0 COIN';
+        };
+
+        function tamamla() {
+            alert("Başarılı! Test modu akışı doğrulandı.");
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

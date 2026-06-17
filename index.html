@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFİAMC | BOXPVP</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-[#0a0a0a] text-white">
+
+    <header class="main-header mt-8" data-aos="fade-down">
+        <div class="container mx-auto px-6 grid grid-cols-3 items-center">
+            <div class="flex justify-start">
+                <div onclick="copyIP()" class="cursor-pointer group bg-white/5 border border-white/10 px-4 py-2 rounded-xl hover:border-blue-500 transition-all">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sunucu IP</p>
+                    <p class="text-sm font-black text-white">sofianetwork.falixsrv.me</p>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <a href="index.html" class="hover:scale-105 transition-transform"><img src="logo.png" alt="Logo" class="h-24 drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]"></a>
+            </div>
+            <nav class="flex justify-end items-center gap-4">
+                <a href="index.html" class="nav-link active"><i class="fa-solid fa-house"></i></a>
+                <a href="duyuru.html" class="nav-link"><i class="fa-solid fa-bullhorn"></i></a>
+                <a href="market.html" class="nav-link"><i class="fa-solid fa-gem"></i></a>
+                <a href="kurallar.html" class="nav-link"><i class="fa-solid fa-gavel"></i></a>
+                <a href="destek.html" class="nav-link"><i class="fa-solid fa-headset"></i></a>
+                <a href="https://discord.gg/GRZyP6mrD" target="_blank" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-all">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 mt-10">
+        <section class="relative w-full h-[600px] mb-20 rounded-[3rem] overflow-hidden shadow-2xl flex items-center justify-center border border-blue-500/20" data-aos="zoom-in">
+            <img src="minecraft.png" alt="Minecraft Background" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/70"></div>
+            <div class="relative z-10 text-center px-4">
+                <h1 class="text-7xl md:text-9xl font-black italic uppercase tracking-tighter text-white mb-6">SOFİAMC <span class="text-blue-500">BOXPVP</span></h1>
+                <p class="text-xl md:text-2xl text-gray-200 font-bold mb-10 max-w-2xl mx-auto italic">"Sıradan bir hayatı unut, efsaneni yazmaya başla. Vahşi doğada hayatta kal, krallığını kur ve dünyanın en güçlü oyuncusu ol!"</p>
+                <button onclick="copyIP()" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-6 rounded-2xl font-black uppercase text-xl transition-all shadow-[0_0_40px_rgba(59,130,246,0.6)] hover:scale-105">
+                    <i class="fa-solid fa-copy mr-3"></i> SUNUCU ADRESİNİ KOPYALA
+                </button>
+            </div>
+        </section>
+
+        <div class="flex justify-center mb-20">
+            <div class="glass px-10 py-5 rounded-full border border-blue-500/30 font-black tracking-widest flex items-center gap-4 text-xl">
+                <i class="fa-solid fa-circle text-green-500 animate-pulse"></i>
+                <span id="player-count">...</span> OYUNCU ŞU AN SOFİAMC'DA!
+            </div>
+        </div>
+
+        <section class="grid md:grid-cols-3 gap-6 mb-20" data-aos="fade-up">
+            <div class="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-blue-500 transition-all">
+                <i class="fa-solid fa-server text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-2xl font-black mb-2">Gelişmiş Sistem</h3>
+                <p class="text-gray-400">Lag sorunu olmadan, özel eklentilerle donatılmış yüksek performanslı sunucumuzda eğlencenin tadını çıkar.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-blue-500 transition-all">
+                <i class="fa-solid fa-users text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-2xl font-black mb-2">Aktif Topluluk</h3>
+                <p class="text-gray-400">Her gün yüzlerce oyuncuyla tanış, ticaret yap, klanını kur ve SOFİAMC dünyasında yerini al.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-blue-500 transition-all">
+                <i class="fa-solid fa-shield-halved text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-2xl font-black mb-2">Güvenli Oyun</h3>
+                <p class="text-gray-400">Hile koruması ve profesyonel yönetim ekibimizle adil ve huzurlu bir oyun deneyimi sunuyoruz.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-10 border-t border-white/5 mt-10">
+        <div class="flex justify-center gap-6 mb-6">
+            <a href="#" class="text-2xl hover:text-blue-500 transition-colors"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="text-2xl hover:text-blue-500 transition-colors"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" class="text-2xl hover:text-blue-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p class="text-gray-500 font-bold uppercase tracking-widest text-xs mb-2">SOFİAMC © 2026 - TÜM HAKLARI SAKLIDIR.</p>
+        <p class="text-blue-500/50 font-black uppercase tracking-widest text-[10px]">SİTE YAPIMCISI : STRYKER</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+        function copyIP() { navigator.clipboard.writeText("sofianetwork.falixsrv.me"); alert("IP kopyalandı: sofianetwork.falixsrv.me"); }
+        fetch('https://api.mcsrvstat.us/2/sofianetwork.falixsrv.me')
+            .then(r => r.json())
+            .then(d => document.getElementById('player-count').innerText = d.players.online);
+    </script>
+</body>
+</html>
