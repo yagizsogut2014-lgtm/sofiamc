@@ -3,21 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SofiaMC | SMP Sunucusu</title>
+<title>SofiaMC | Minecraft SMP Sunucusu</title>
+<meta name="description" content="SofiaMC - Hayalindeki Survival Multiplayer deneyimi. Land claim, ekonomi, eventler ve daha fazlası.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap');
 
   :root {
-    --bg: #0b0f0c;
-    --card: #121a14;
+    --bg: #070b08;
+    --card: #0f1611;
+    --card-hover: #152019;
     --accent: #3ddc84;
-    --accent2: #1a9f5a;
-    --text: #e8f5e9;
-    --muted: #8fa898;
-    --border: #1e2e24;
+    --accent-dim: #2ab86a;
+    --accent-glow: rgba(61, 220, 132, 0.35);
+    --text: #eef7f0;
+    --muted: #7d9a85;
+    --border: #1a2a20;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
@@ -25,222 +29,495 @@
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
+    line-height: 1.5;
   }
 
-  /* Background pattern */
-  body::before {
-    content: '';
+  .bg-grid {
     position: fixed;
     inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(61,220,132,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(26,159,90,0.06) 0%, transparent 50%),
-      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(61,220,132,0.02) 40px, rgba(61,220,132,0.02) 41px);
+    background-image:
+      linear-gradient(rgba(61,220,132,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61,220,132,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
 
+  .bg-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-glow.one { top: -200px; left: -100px; background: var(--accent); }
+  .bg-glow.two { bottom: -150px; right: -100px; background: #1a9f5a; }
+
   .container {
     position: relative;
     z-index: 1;
-    max-width: 1100px;
+    max-width: 1140px;
     margin: 0 auto;
     padding: 0 20px;
   }
 
-  /* HEADER */
-  header {
-    padding: 28px 0 20px;
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(7, 11, 8, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+
+  nav .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
   }
 
   .logo-area {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
   }
 
   .logo-area img {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
     object-fit: cover;
     border: 2px solid var(--accent);
-    box-shadow: 0 0 20px rgba(61,220,132,0.35);
+    box-shadow: 0 0 18px var(--accent-glow);
   }
 
   .logo-text h1 {
     font-family: 'Press Start 2P', cursive;
-    font-size: 22px;
+    font-size: 18px;
     color: var(--accent);
-    letter-spacing: 1px;
   }
 
   .logo-text span {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--muted);
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-top: 2px;
   }
 
-  .status-badge {
+  .nav-links {
     display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); background: rgba(61,220,132,0.08); }
+
+  .btn {
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    padding: 10px 18px;
-    border-radius: 50px;
-    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 10px;
     font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   }
 
-  .status-dot {
-    width: 10px;
-    height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 1.6s infinite;
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color: #070b08;
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px var(--accent-glow);
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(61,220,132,0.5); }
-    50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(61,220,132,0); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .btn-outline:hover {
+    background: rgba(61,220,132,0.1);
+    transform: translateY(-2px);
+  }
+
+  .btn-discord {
+    background: #5865F2;
+    color: white;
+  }
+  .btn-discord:hover {
+    background: #4752c4;
+    transform: translateY(-2px);
   }
 
   /* HERO */
   .hero {
+    padding: 80px 0 70px;
     text-align: center;
-    padding: 60px 0 50px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(61,220,132,0.1);
+    border: 1px solid rgba(61,220,132,0.25);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+  }
+
+  .badge .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 8px transparent; }
   }
 
   .hero h2 {
     font-family: 'Press Start 2P', cursive;
-    font-size: clamp(22px, 5vw, 36px);
-    line-height: 1.5;
-    margin-bottom: 18px;
-    background: linear-gradient(135deg, #3ddc84, #a8ffce);
+    font-size: clamp(24px, 5.5vw, 42px);
+    line-height: 1.55;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #3ddc84 0%, #a8ffce 50%, #3ddc84 100%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: textShine 5s linear infinite;
+  }
+
+  @keyframes textShine {
+    to { background-position: 200% center; }
   }
 
   .hero p {
     color: var(--muted);
     font-size: 17px;
-    max-width: 520px;
+    max-width: 540px;
     margin: 0 auto 36px;
-    line-height: 1.6;
   }
 
-  /* INFO CARDS */
-  .info-grid {
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* SERVER INFO */
+  .server-info {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 18px;
-    margin-bottom: 50px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 80px;
   }
 
   .info-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 24px;
+    padding: 26px 18px;
     text-align: center;
-    transition: transform 0.25s, border-color 0.25s;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
   }
 
   .info-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
+    border-color: rgba(61,220,132,0.4);
+    transform: translateY(-5px);
+    background: var(--card-hover);
   }
+  .info-card:hover::before { opacity: 1; }
 
-  .info-card .icon {
-    font-size: 32px;
-    margin-bottom: 12px;
-  }
+  .info-card .icon { font-size: 30px; margin-bottom: 12px; }
 
   .info-card h3 {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 8px;
+    font-weight: 600;
   }
 
   .info-card .value {
     font-family: 'Press Start 2P', cursive;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--accent);
     word-break: break-all;
   }
 
-  /* FEATURES */
-  .section-title {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 16px;
-    color: var(--accent);
+  .copy-btn {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTIONS */
+  section { margin-bottom: 90px; }
+
+  .section-head {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 40px;
+  }
+
+  .section-head h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .section-head p {
+    color: var(--muted);
+    font-size: 15px;
   }
 
   .features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 18px;
-    margin-bottom: 60px;
   }
 
   .feature {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px;
+    border-radius: 16px;
+    padding: 26px;
     display: flex;
-    gap: 16px;
-    align-items: flex-start;
+    gap: 18px;
+    transition: all 0.3s;
+  }
+
+  .feature:hover {
+    border-color: rgba(61,220,132,0.35);
+    transform: translateY(-3px);
   }
 
   .feature .f-icon {
-    font-size: 28px;
+    width: 52px;
+    height: 52px;
+    background: rgba(61,220,132,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
     flex-shrink: 0;
   }
 
-  .feature h4 {
-    font-size: 16px;
-    margin-bottom: 6px;
+  .feature h4 { font-size: 17px; margin-bottom: 6px; font-weight: 700; }
+  .feature p { font-size: 14px; color: var(--muted); }
+
+  /* STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    counter-reset: step;
   }
 
-  .feature p {
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    position: relative;
+  }
+
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #070b08;
+    font-weight: 800;
     font-size: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step h4 { margin: 12px 0 8px; font-size: 16px; }
+  .step p { font-size: 14px; color: var(--muted); }
+
+  /* RULES */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .rule {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .rule .num {
+    background: rgba(61,220,132,0.12);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .rule p { font-size: 14px; color: var(--muted); }
+
+  /* CTA */
+  .cta {
+    background: linear-gradient(135deg, rgba(61,220,132,0.12), rgba(26,159,90,0.08));
+    border: 1px solid rgba(61,220,132,0.25);
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+  }
+
+  .cta h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .cta p {
     color: var(--muted);
-    line-height: 1.5;
+    margin-bottom: 28px;
+    font-size: 16px;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   /* FOOTER */
   footer {
-    text-align: center;
-    padding: 30px 0 40px;
-    color: var(--muted);
-    font-size: 13px;
     border-top: 1px solid var(--border);
+    padding: 40px 0 30px;
+    text-align: center;
   }
 
-  /* ========== 29 EKİM POPUP ========== */
+  footer .logo-area {
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  footer p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  footer .socials {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 18px 0;
+  }
+
+  footer .socials a {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.2s;
+  }
+  footer .socials a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* 29 EKİM POPUP */
   #bayram-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(10px);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s, visibility 0.4s;
+    transition: opacity 0.45s, visibility 0.45s;
   }
 
   #bayram-overlay.show {
@@ -249,60 +526,55 @@
   }
 
   .bayram-box {
-    background: linear-gradient(160deg, #0f1a12 0%, #16241a 100%);
+    background: linear-gradient(165deg, #0c1510 0%, #132018 100%);
     border: 2px solid var(--accent);
-    border-radius: 24px;
-    padding: 48px 40px;
+    border-radius: 28px;
+    padding: 52px 44px;
     text-align: center;
-    max-width: 480px;
-    width: 90%;
-    box-shadow: 0 0 60px rgba(61,220,132,0.25), 0 25px 50px rgba(0,0,0,0.5);
-    transform: scale(0.85);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 500px;
+    width: 92%;
+    box-shadow: 0 0 80px var(--accent-glow), 0 30px 60px rgba(0,0,0,0.6);
+    transform: scale(0.82) translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
   }
 
   #bayram-overlay.show .bayram-box {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 
   .bayram-box::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(from 0deg, transparent, rgba(61,220,132,0.08), transparent 30%);
-    animation: spin 8s linear infinite;
+    top: -60%;
+    left: -60%;
+    width: 220%;
+    height: 220%;
+    background: conic-gradient(from 0deg, transparent, rgba(61,220,132,0.07), transparent 40%);
+    animation: spin 10s linear infinite;
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .bayram-content {
-    position: relative;
-    z-index: 2;
-  }
+  .bayram-content { position: relative; z-index: 2; }
 
   .bayram-flag {
-    font-size: 48px;
-    margin-bottom: 18px;
-    filter: drop-shadow(0 0 12px rgba(255,0,0,0.4));
+    font-size: 56px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 16px rgba(255,50,50,0.5));
   }
 
   .bayram-title {
     font-family: 'Press Start 2P', cursive;
-    font-size: clamp(18px, 4.5vw, 26px);
-    line-height: 1.6;
-    margin-bottom: 12px;
+    font-size: clamp(20px, 5vw, 28px);
+    line-height: 1.55;
+    margin-bottom: 14px;
     background: linear-gradient(90deg, #ff4d4d, #ffd700, #3ddc84, #ffd700, #ff4d4d);
     background-size: 300% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shine 4s linear infinite;
+    animation: shine 3.5s linear infinite;
   }
 
   @keyframes shine {
@@ -313,36 +585,45 @@
   .bayram-sub {
     color: var(--muted);
     font-size: 15px;
-    margin-bottom: 28px;
-    line-height: 1.5;
+    margin-bottom: 30px;
+    line-height: 1.55;
   }
 
   .bayram-btn {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #0b0f0c;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color: #070b08;
     border: none;
-    padding: 14px 36px;
+    padding: 15px 40px;
     border-radius: 50px;
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
+    box-shadow: 0 4px 24px var(--accent-glow);
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(61,220,132,0.4);
   }
-
   .bayram-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 28px rgba(61,220,132,0.55);
+    transform: scale(1.06);
+    box-shadow: 0 6px 32px var(--accent-glow);
   }
 
-  /* Responsive */
-  @media (max-width: 600px) {
-    .logo-text h1 { font-size: 16px; }
-    .bayram-box { padding: 36px 24px; }
+  @media (max-width: 768px) {
+    .nav-links a:not(.btn) { display: none; }
+    .server-info { grid-template-columns: 1fr 1fr; }
+    .hero { padding: 50px 0 40px; }
+    .logo-text h1 { font-size: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .server-info { grid-template-columns: 1fr; }
+    .cta { padding: 36px 22px; }
   }
 </style>
 </head>
 <body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow one"></div>
+<div class="bg-glow two"></div>
 
 <!-- 29 EKİM POPUP -->
 <div id="bayram-overlay">
@@ -350,40 +631,51 @@
     <div class="bayram-content">
       <div class="bayram-flag">🇹🇷</div>
       <div class="bayram-title">29 Ekim<br>Kutlu Olsun!</div>
-      <p class="bayram-sub">Cumhuriyetimizin 103. yılı kutlu olsun.<br>SofiaMC ailesi olarak hep birlikte kutluyoruz.</p>
+      <p class="bayram-sub">Cumhuriyetimizin 103. yılı kutlu olsun.<br>SofiaMC ailesi olarak hep birlikte kutluyoruz 💚</p>
       <button class="bayram-btn" onclick="kapatBayram()">Devam Et</button>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <!-- HEADER -->
-  <header>
-    <div class="logo-area">
-      <img src="logo.png" alt="SofiaMC Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect fill=%22%233ddc84%22 width=%2264%22 height=%2264%22 rx=%2212%22/%3E%3Ctext x=%2232%22 y=%2240%22 font-size=%2228%22 text-anchor=%22middle%22 fill=%22%230b0f0c%22 font-family=%22sans-serif%22 font-weight=%22bold%22%3ESM%3C/text%3E%3C/svg%3E'">
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo-area">
+      <img src="logo.png" alt="SofiaMC" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect fill=%22%233ddc84%22 width=%2264%22 height=%2264%22 rx=%2212%22/%3E%3Ctext x=%2232%22 y=%2242%22 font-size=%2224%22 text-anchor=%22middle%22 fill=%22%23070b08%22 font-family=%22sans-serif%22 font-weight=%22bold%22%3ESM%3C/text%3E%3C/svg%3E'">
       <div class="logo-text">
         <h1>SofiaMC</h1>
         <span>SMP SUNUCUSU</span>
       </div>
+    </a>
+    <div class="nav-links">
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#katil">Nasıl Katılırım?</a>
+      <a href="#kurallar">Kurallar</a>
+      <a href="#discord" class="btn btn-discord">Discord</a>
     </div>
-    <div class="status-badge">
-      <div class="status-dot"></div>
-      Geliştiriliyor
-    </div>
-  </header>
+  </div>
+</nav>
+
+<main class="container">
 
   <!-- HERO -->
   <section class="hero">
+    <div class="badge"><span class="dot"></span> Geliştiriliyor • Yakında Açılıyor</div>
     <h2>Hayalindeki SMP<br>Burada Başlıyor</h2>
-    <p>Doğal survival, ekonomi, land claim ve daha fazlası. SofiaMC ile birlikte büyüyecek bir dünya inşa ediyoruz.</p>
+    <p>Doğal survival, güçlü ekonomi, land claim ve unutulmaz eventler. SofiaMC ile birlikte büyüyecek bir dünya inşa ediyoruz.</p>
+    <div class="hero-btns">
+      <a href="#katil" class="btn btn-primary">Nasıl Katılırım?</a>
+      <a href="#discord" class="btn btn-outline">Discord'a Gel</a>
+    </div>
   </section>
 
-  <!-- INFO -->
-  <div class="info-grid">
+  <!-- SERVER INFO -->
+  <div class="server-info">
     <div class="info-card">
       <div class="icon">🌐</div>
       <h3>Sunucu IP</h3>
-      <div class="value">Yakında</div>
+      <div class="value" id="ip-text">Yakında</div>
+      <button class="copy-btn" onclick="copyIP()">Kopyala</button>
     </div>
     <div class="info-card">
       <div class="icon">📦</div>
@@ -392,7 +684,7 @@
     </div>
     <div class="info-card">
       <div class="icon">👥</div>
-      <h3>Oyuncu</h3>
+      <h3>Oyuncular</h3>
       <div class="value">— / —</div>
     </div>
     <div class="info-card">
@@ -403,49 +695,146 @@
   </div>
 
   <!-- FEATURES -->
-  <h3 class="section-title">✦ ÖZELLİKLER ✦</h3>
-  <div class="features">
-    <div class="feature">
-      <div class="f-icon">🏡</div>
-      <div>
-        <h4>Land Claim</h4>
-        <p>Arazini koru, güvenli bir şekilde evini inşa et. İstediğin kadar genişletebilirsin.</p>
+  <section id="ozellikler">
+    <div class="section-head">
+      <h3>✦ ÖZELLİKLER ✦</h3>
+      <p>SofiaMC'de seni neler bekliyor?</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="f-icon">🏡</div>
+        <div>
+          <h4>Land Claim</h4>
+          <p>Arazini koru, güvenli bir şekilde evini inşa et. İstediğin kadar genişletebilirsin.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="f-icon">💰</div>
+        <div>
+          <h4>Ekonomi Sistemi</h4>
+          <p>Oyuncu ekonomisi, market ve ticaret. Zengin olmak tamamen senin elinde.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="f-icon">⚔️</div>
+        <div>
+          <h4>PvP & Eventler</h4>
+          <p>Düzenli etkinlikler, turnuvalar ve adil PvP alanları seni bekliyor.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="f-icon">🌿</div>
+        <div>
+          <h4>Vanilla +</h4>
+          <p>Saf Minecraft hissi, hafif eklentilerle zenginleştirilmiş deneyim.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="f-icon">🛡️</div>
+        <div>
+          <h4>Aktif Yetkili</h4>
+          <p>7/24 aktif yetkili ekibi ile sorunlar hızla çözülür, hileler engellenir.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="f-icon">🎉</div>
+        <div>
+          <h4>Topluluk</h4>
+          <p>Samimi ve dostane bir topluluk. Yeni arkadaşlar edin, birlikte oyna.</p>
+        </div>
       </div>
     </div>
-    <div class="feature">
-      <div class="f-icon">💰</div>
-      <div>
-        <h4>Ekonomi Sistemi</h4>
-        <p>Oyuncu ekonomisi, market ve ticaret. Zengin olmak senin elinde.</p>
-      </div>
-    </div>
-    <div class="feature">
-      <div class="f-icon">⚔️</div>
-      <div>
-        <h4>PvP & Eventler</h4>
-        <p>Düzenli etkinlikler, turnuvalar ve adil PvP alanları seni bekliyor.</p>
-      </div>
-    </div>
-    <div class="feature">
-      <div class="f-icon">🌿</div>
-      <div>
-        <h4>Vanilla +</h4>
-        <p>Saf Minecraft hissi, hafif eklentilerle zenginleştirilmiş deneyim.</p>
-      </div>
-    </div>
-  </div>
+  </section>
 
-  <footer>
-    © 2026 SofiaMC — Tüm hakları saklıdır.<br>
-    Made with ❤️ for the community
-  </footer>
-</div>
+  <!-- HOW TO JOIN -->
+  <section id="katil">
+    <div class="section-head">
+      <h3>✦ NASIL KATILIRIM? ✦</h3>
+      <p>3 adımda sunucuya bağlan</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Minecraft'ı Aç</h4>
+        <p>Java Edition veya Bedrock (duyuru gelecek) ile oyunu başlat.</p>
+      </div>
+      <div class="step">
+        <h4>IP'yi Gir</h4>
+        <p>Sunucu IP'si yakında açıklanacak. Discord'dan takip et!</p>
+      </div>
+      <div class="step">
+        <h4>Eğlenmeye Başla</h4>
+        <p>Spawn'da uyan, kuralları oku ve maceraya atıl.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RULES -->
+  <section id="kurallar">
+    <div class="section-head">
+      <h3>✦ KURALLAR ✦</h3>
+      <p>Herkes için adil ve keyifli bir ortam</p>
+    </div>
+    <div class="rules-grid">
+      <div class="rule">
+        <div class="num">1</div>
+        <p>Hile, x-ray, fly ve her türlü haksız avantaj yasaktır.</p>
+      </div>
+      <div class="rule">
+        <div class="num">2</div>
+        <p>Diğer oyunculara saygılı ol. Hakaret ve toksik davranış kabul edilmez.</p>
+      </div>
+      <div class="rule">
+        <div class="num">3</div>
+        <p>Griefing ve hırsızlık, claim dışı alanlarda bile sınırlıdır. Yetkililere sor.</p>
+      </div>
+      <div class="rule">
+        <div class="num">4</div>
+        <p>Reklam ve spam yapmak yasaktır (kendi sunucun vb.).</p>
+      </div>
+      <div class="rule">
+        <div class="num">5</div>
+        <p>Yetkili kararlarına uymak zorunludur. İtiraz Discord'dan yapılır.</p>
+      </div>
+      <div class="rule">
+        <div class="num">6</div>
+        <p>Hesap paylaşımı ve alt hesap ile avantaj sağlamak yasaktır.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="discord">
+    <h3>Hazır mısın?</h3>
+    <p>Discord sunucumuza katıl, duyuruları kaçırma ve topluluğa dahil ol.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-discord" onclick="alert('Discord linki yakında eklenecek!')">Discord'a Katıl</a>
+      <a href="#katil" class="btn btn-outline">IP'yi Bekle</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="logo-area">
+      <img src="logo.png" alt="SofiaMC" style="width:40px;height:40px" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect fill=%22%233ddc84%22 width=%2264%22 height=%2264%22 rx=%2212%22/%3E%3Ctext x=%2232%22 y=%2242%22 font-size=%2224%22 text-anchor=%22middle%22 fill=%22%23070b08%22 font-family=%22sans-serif%22 font-weight=%22bold%22%3ESM%3C/text%3E%3C/svg%3E'">
+      <div class="logo-text">
+        <h1 style="font-size:16px">SofiaMC</h1>
+      </div>
+    </div>
+    <div class="socials">
+      <a href="#" title="Discord">💬</a>
+      <a href="#" title="YouTube">▶️</a>
+      <a href="#" title="Instagram">📷</a>
+    </div>
+    <p>© 2026 SofiaMC — Tüm hakları saklıdır.</p>
+    <p>Made with ❤️ for the community</p>
+  </div>
+</footer>
 
 <script>
-  // İlk girişte 29 Ekim popup'ı göster
   function gosterBayram() {
-    const gosterildi = localStorage.getItem('sofiamc_29ekim');
-    if (!gosterildi) {
+    if (!localStorage.getItem('sofiamc_29ekim')) {
       document.getElementById('bayram-overlay').classList.add('show');
     }
   }
@@ -455,15 +844,20 @@
     localStorage.setItem('sofiamc_29ekim', '1');
   }
 
-  // ESC ile de kapatılabilsin
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') kapatBayram();
   });
 
-  // Sayfa yüklenince göster
-  window.addEventListener('load', () => {
-    setTimeout(gosterBayram, 400);
-  });
+  window.addEventListener('load', () => setTimeout(gosterBayram, 500));
+
+  function copyIP() {
+    const ip = document.getElementById('ip-text').textContent;
+    navigator.clipboard.writeText(ip).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Kopyalandı!';
+      setTimeout(() => btn.textContent = 'Kopyala', 1800);
+    }).catch(() => alert('IP: ' + ip));
+  }
 </script>
 </body>
 </html>
